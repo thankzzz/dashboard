@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { RouterContent } from '../../Navigation/RouterContent'
 import '../../Styles/css/dashboard.css'
 import Header from '../Header'
 function Index() {
@@ -30,19 +31,12 @@ function Index() {
                             <a href="!#" className="nav_link"> <i className="fas fa-tachometer-alt nav_icon"></i>
                                 <span className="nav_name">Dashboard</span>
                             </a>
-                            <a href="!#" className="nav_link"> <i className="fas fa-boxes nav_icon"></i>
+                            <a href="/app/product" className="nav_link"> <i className="fas fa-boxes nav_icon"></i>
                                 <span className="nav_name">Product</span>
                             </a>
-                            <a href="!#" className="nav_link"> <i className="fas fa-cog nav_icon"></i>
-                                <span className="nav_name">Setting</span>
-                            </a>
-                            <a href="!#" className="nav_link"> <i className="fas fa-cog nav_icon"></i>
-                                <span className="nav_name">Setting</span>
-                            </a>
-                            <a href="!#" className="nav_link"> <i className="fas fa-cog nav_icon"></i>
-                                <span className="nav_name">Setting</span>
-                            </a>
-                            <a href="!#" className="nav_link"> <i className="fas fa-cog nav_icon"></i>
+                           
+                         
+                            <a href="!#" className="nav_link"> <i class="fas fa-sign-out-alt"></i>
                                 <span className="nav_name">Signout</span>
                             </a>
                         </div>
@@ -52,10 +46,7 @@ function Index() {
             </aside>
             <main className="main">
                 <div className="container-fluid">
-                    <div className="row" style={{ marginBottom: '10px' }}>
-
-
-                    </div>
+                    <RouterContent/>
 
                 </div>
 

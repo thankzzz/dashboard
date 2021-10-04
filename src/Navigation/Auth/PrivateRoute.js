@@ -7,7 +7,7 @@ import { Redirect, Route } from "react-router-dom";
 // screen if you're not yet authenticated.
 function PrivateRoute({ children, ...rest }) {
   let auth = {
-      user:'steven'
+      user:''
   }
   return (
     <Route

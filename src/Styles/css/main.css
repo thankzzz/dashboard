@@ -112,3 +112,29 @@
     align-items: center;
     font-weight: 500;
 }
+
+
+/* login Page */
+
+.bg-login-image{
+	background-image: url('../../Assets/Image/bg-login.jpg');
+	background-size: cover;
+	background-position: center center;
+
+}
+
+.bg-login, .login{
+	min-height: 100vh;
+	
+}
+
+/* end login page */
+
+
+/* not found page */
+
+.notfound{
+	min-height:100vh;
+	color:#fff;
+	
+}

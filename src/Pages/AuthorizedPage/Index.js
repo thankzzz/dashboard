@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { RouterContent } from '../../Navigation/RouterContent'
 import '../../Styles/css/dashboard.css'
 import Header from '../Header'
+import {signout} from '../../Redux/Actions/userAction'
+import {useDispatch} from 'react-redux'
 function Index() {
     const [sidebarClose, setSidebarClose] = useState(false)
     const ToggleSidebar = (e) => {
@@ -11,6 +13,11 @@ function Index() {
     const closeSidebar = (e) => {
         e.preventDefault()
         setSidebarClose(!false)
+    }
+    const dispatch = useDispatch()
+    const handleSignout = (e)=>{
+        e.preventDefault()
+        dispatch(signout())
     }
     const sidebarStatus = sidebarClose ? 'sidenav-disable' : ''
     return (
@@ -36,7 +43,7 @@ function Index() {
                             </a>
                            
                          
-                            <a href="!#" className="nav_link"> <i class="fas fa-sign-out-alt"></i>
+                            <a href="!#" className="nav_link" onClick={(e)=>handleSignout(e)}> <i class="fas fa-sign-out-alt"></i>
                                 <span className="nav_name">Signout</span>
                             </a>
                         </div>

@@ -11,10 +11,10 @@
 }
 .trigger-sidenav{
     position:absolute;
-    height:100vh;
-    width:100vw;
+    min-height:100vh;
+    min-width:100vw;
     background: rgba(126, 122, 122, 0.671);
-  
+    
 }
 .sidenav{
     grid-area:sidenav;

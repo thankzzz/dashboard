@@ -40,9 +40,17 @@ function Index() {
                             </a>
                             <a href="/app/product" className="nav_link"> <i className="fas fa-boxes nav_icon"></i>
                                 <span className="nav_name">Product</span>
-                            </a>
+                            </a>                           
                            
-                         
+                            <a href="/app/brand" className="nav_link"> <i class="fas fa-user-tie"></i>
+                                <span className="nav_name">User</span>
+                            </a>
+                            <a href="/app/brand" className="nav_link"> <i class="far fa-envelope"></i>
+                                <span className="nav_name">Inbox</span>
+                            </a>
+                            <a href="/app/brand" className="nav_link"> <i class="fas fa-cog"></i>
+                                <span className="nav_name">Setting</span>
+                            </a>
                             <a href="!#" className="nav_link" onClick={(e)=>handleSignout(e)}> <i class="fas fa-sign-out-alt"></i>
                                 <span className="nav_name">Signout</span>
                             </a>

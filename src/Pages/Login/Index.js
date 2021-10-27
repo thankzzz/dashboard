@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import {signin} from '../../Redux/Actions/userAction'
 import { useHistory } from 'react-router-dom'
-import EmiLogo from '../../Assets/Image/EMi-LOGO.png'
+
 function Index() {
     const userSignin = useSelector((state)=>state.userSignin)
     const {error,loading} = userSignin

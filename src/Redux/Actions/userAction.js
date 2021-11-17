@@ -3,11 +3,13 @@ import Cookie from 'js-cookie'
 import { USER_SIGNIN_REQUEST,USER_SIGNIN_SUCCESS,USER_SIGNIN_FAIL,USER_SIGNOUT } from '../Type/userType'
 
 const signin = (userData)=>async(dispatch)=>{
-    dispatch({type:USER_SIGNIN_REQUEST})
+    dispatch({type:USER_SIGNIN_REQUEST})    
     try{
-        const {data} = await Axios.post('http://localhost:8080/api/users/signin',userData)
+        const {data} = await Axios.post(process.env.REACT_APP_API_URL + 'users/signin',userData)
+        const expireTime = new Date(new Date().getTime() + 120 * 60 * 1000 )
         dispatch({type:USER_SIGNIN_SUCCESS,payload:data})
-        Cookie.set('userInfo',JSON.stringify(data))   
+        Cookie.set('userInfo',JSON.stringify(data),{expires:expireTime}) 
+        Cookie.set('lastTimeStamp',expireTime)
     }catch(err){
         if(err.response){
             dispatch({type:USER_SIGNIN_FAIL,payload:err.response.data.message})

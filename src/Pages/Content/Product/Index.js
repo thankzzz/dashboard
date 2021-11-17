@@ -1,7 +1,6 @@
 import React,{useState,useEffect,useCallback} from 'react'
 import Pagination from '../../../Components/Pagination'
 import '../../../Styles/css/main.css'
-import CreateBrandModal from './createBrandModal'
 import CreateModal from './CreateProductModal'
 import Axios from 'axios'
 import { successNotification, errorNotification } from '../../../Components/NotificationSetting'
@@ -14,9 +13,7 @@ function Index() {
     const [listCategory,setListCategory] = useState([])
     const getDataBrand = () =>{
         Axios.get('http://localhost:8080/api/product/brand/data',{headers:authHeader()}).then(response=>{
-            let data = response.data
-           
-           
+            let data = response.data 
             setListBrand(data.info)
         }).catch(err=>{
             if (err.response) {
@@ -46,7 +43,6 @@ function Index() {
                     message: err.response.statusText + " " + err.response.status
                 })
             }
-    
             else {
                 store.addNotification({
                     ...errorNotification,
@@ -73,7 +69,6 @@ function Index() {
                 }
             })
             setListProduct(currentData)
-         
         }).catch(err=>{
             if (err.response) {             
                 store.addNotification({
@@ -228,8 +223,7 @@ function Index() {
                             <span ><i class="fas fa-ellipsis-h"></i></span>
                         </div>
                     </div>
-                    ))}
-                    
+                    ))}                 
                 </div>
             </div>
             <CreateModal 
@@ -237,7 +231,7 @@ function Index() {
                 listCategory = {listCategory}
                 getDataProduct = {getDataProduct}
             />
-            <CreateBrandModal/>
+         
             <Pagination/>
         </div>
 

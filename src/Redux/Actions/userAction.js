@@ -9,7 +9,7 @@ const signin = (userData)=>async(dispatch)=>{
         const expireTime = new Date(new Date().getTime() + 120 * 60 * 1000 )
         dispatch({type:USER_SIGNIN_SUCCESS,payload:data})
         Cookie.set('userInfo',JSON.stringify(data),{expires:expireTime}) 
-        Cookie.set('lastTimeStamp',expireTime)
+      
     }catch(err){
         if(err.response){
             dispatch({type:USER_SIGNIN_FAIL,payload:err.response.data.message})
@@ -21,6 +21,7 @@ const signin = (userData)=>async(dispatch)=>{
 
 const signout = () =>async(dispatch)=>{
         Cookie.remove("userInfo");
+        window.location.reload()
         dispatch({type:USER_SIGNOUT})
 }
 export {signin,signout}

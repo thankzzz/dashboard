@@ -13,7 +13,8 @@ function Index() {
     const [listCategory,setListCategory] = useState([])
     const getDataBrand = () =>{
         Axios.get('http://localhost:8080/api/product/brand/data',{headers:authHeader()}).then(response=>{
-            let data = response.data 
+            let data = response.data
+ 
             setListBrand(data.info)
         }).catch(err=>{
             if (err.response) {

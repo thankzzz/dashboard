@@ -8,12 +8,13 @@ import {ForwardRoute,BackwardRoute} from '../Navigation/Auth/PrivateRoute'
 import {useSelector} from 'react-redux'
 import Cookie from 'js-cookie'
 import moment from 'moment'
+import SessionTimeout from '../Services/SessionTimeout';
 export const RouterConfig = () =>{
     const userSignin = useSelector((state)=>state.userSignin)
-    const {userInfo} = userSignin
+    const {user} = userSignin
     const yser = Cookie.get('lastTimeStamp')
     const checkAuth = () =>{
-        if(userInfo){
+        if(user){
             let tmpData = moment(yser)
             let tmpDatay = moment()
             let checked = tmpDatay.isSameOrAfter(tmpData)
@@ -27,15 +28,11 @@ export const RouterConfig = () =>{
    
     return(
         <Switch>
-
             <Route exact path="/"> <Redirect to="/app"/></Route> 
             <BackwardRoute path={DASHBOARD} component={Index} isAuthenticated={()=>checkAuth()}/>                
              <ForwardRoute exact path="/login" component={Login} isAuthenticated={()=>checkAuth()}/>               
             <Route path="*" component={NotFound}/>
-            <AuthVerify/>
-              
-            
-        
+               
         </Switch>
     )
 }

@@ -6,10 +6,13 @@ import { store } from 'react-notifications-component'
 import Axios from 'axios'
 import authHeader from '../../../Services/auth-headers'
 function Index() {
-    const dispatch = useDispatch()
     // Brand section
     const [listBrand, setListBrand] = useState([])
-    const [loadingBrand, setLoadingBrand] = useState(true)
+    
+    const [loading, setLoading] = useState({
+        brand: false,
+        category: false
+    })
     const [updateBrand, setUpdateBrand] = useState({
         name: '',
         image: null
@@ -35,9 +38,9 @@ function Index() {
         formData.append('name', updateBrand.name)
         formData.append('imageFile', updateBrand.image)
 
-        dispatch(showLoading())
+        setLoading({ ...loading, brand: true })
         Axios.post('http://localhost:8080/api/product/brand/create', formData, { headers: authHeader() }).then(response => {
-            dispatch(hideLoading())
+            setLoading({ ...loading, brand: false })
             store.addNotification({
                 ...successNotification,
                 message: 'Item added successfully'
@@ -45,8 +48,9 @@ function Index() {
             setUpdateBrand({ ...updateBrand, name: '' })
             getDataBrand()
         }).catch(err => {
-
-            dispatch(hideLoading())
+            setLoading({ ...loading, brand: false })
+            setLoading({ ...loading, brand: false })
+            
             if (err.response) {
                 store.addNotification({
                     ...errorNotification,
@@ -62,14 +66,14 @@ function Index() {
         })
     }
     const getDataBrand = useCallback(() => {
-        setLoadingBrand(true)
+        setLoading({...loading,brand:true})
         Axios({
             method: 'GET',
             url: 'http://localhost:8080/api/product/brand/data',
             headers: authHeader()
 
         }).then(response => {
-            setLoadingBrand(false)
+            setLoading({...loading,brand:false})
             const data = response.data
 
             const tmp_data = data.info && data.info.map(item => {
@@ -80,10 +84,9 @@ function Index() {
                     checked: false,
                 }
             })
-
             setListBrand(tmp_data)
         }).catch(err => {
-            setLoadingBrand(false)
+            setLoading({...loading,brand:false})
             if (err.response) {
                 store.addNotification({
                     ...errorNotification,
@@ -99,92 +102,92 @@ function Index() {
             }
         })
     }, [])
-    const handleCheckSingleBrand= (id) => {
+    const handleCheckSingleBrand = (id) => {
         let tmpArr = Array.from(listBrand)
         let index = tmpArr.findIndex(c => c.id === id)
         tmpArr[index].checked = !tmpArr[index].checked
         setListBrand(tmpArr)
     }
-    const handleCheckAllBrand = (e)=>{
+    const handleCheckAllBrand = (e) => {
         let tmpArr = Array.from(listBrand)
-        for(let i=0;i<tmpArr.length; i++){
+        for (let i = 0; i < tmpArr.length; i++) {
             tmpArr[i].checked = e.target.checked
         }
         setListBrand(tmpArr)
     }
 
-    const deleteItemBrand = (e)=>{
+    const deleteItemBrand = (e) => {
         e.preventDefault()
-        dispatch(showLoading())
+        setLoading({ ...loading, brand: true })
         let currentId = []
         let tmp_arr = Array.from(listBrand)
         let filterData = tmp_arr.filter(item => item.checked === true)
         for (let i = 0; i < filterData.length; i++) {
             currentId.push(filterData[i].id)
-        }     
+        }
         if (filterData.length <= 0) {
-            dispatch(hideLoading())
+            setLoading({ ...loading, brand: false })
             return;
         }
-        
-       Axios.put('http://localhost:8080/api/product/brand/delete',{id:currentId},{headers:authHeader()}).then(response=>{
+
+        Axios.put('http://localhost:8080/api/product/brand/delete', { id: currentId }, { headers: authHeader() }).then(response => {
             store.addNotification({
                 ...successNotification,
                 message: 'Item deleted successfully'
             })
-            dispatch(hideLoading())
+            setLoading({ ...loading, brand: false })
             getDataBrand()
-       }).catch(err=>{
-        dispatch(hideLoading())
-        if (err.response) {
-            store.addNotification({
-                ...errorNotification,
-                message: err.response.data.message
-            })
-        }
+        }).catch(err => {
+            setLoading({ ...loading, brand: false })
+            if (err.response) {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.response.data.message
+                })
+            }
 
-        else {
-            store.addNotification({
-                ...errorNotification,
-                message: err.message
-            })
-        }
-       })
+            else {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.message
+                })
+            }
+        })
     }
-    const deleteSingleBrand = (e,id)=>{
+    const deleteSingleBrand = (e, id) => {
         e.preventDefault()
         const currentId = id
-        Axios.put('http://localhost:8080/api/product/brand/delete',{id:currentId},{headers:authHeader()}).then(response=>{
+        Axios.put('http://localhost:8080/api/product/brand/delete', { id: currentId }, { headers: authHeader() }).then(response => {
             store.addNotification({
                 ...successNotification,
                 message: 'Item deleted successfully'
             })
-            dispatch(hideLoading())
+            setLoading({ ...loading, brand: false })
             getDataBrand()
-       }).catch(err=>{
-        dispatch(hideLoading())
-        if (err.response) {
-            store.addNotification({
-                ...errorNotification,
-                message: err.response.data.message
-            })
-        }
+        }).catch(err => {
+            setLoading({ ...loading, brand: false })
+            if (err.response) {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.response.data.message
+                })
+            }
 
-        else {
-            store.addNotification({
-                ...errorNotification,
-                message: err.message
-            })
-        }
-       })
+            else {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.message
+                })
+            }
+        })
     }
     // End brand section
 
     // Category section
     const [loadingCategory, setLoadingCategory] = useState(true)
-    
+
     const [listCategory, setListCategory] = useState([])
-    
+
     const [updateCategory, setUpdateCategory] = useState({
         name: ''
     })
@@ -201,18 +204,18 @@ function Index() {
             })
             return;
         }
-        dispatch(showLoading())
+        setLoading({...loading,category:true})
 
         Axios.post('http://localhost:8080/api/product/category/create', { name: updateCategory.name }, { headers: authHeader() }).then(response => {
-            dispatch(hideLoading())
+             setLoading({...loading,category:false})
             store.addNotification({
                 ...successNotification,
                 message: 'Item added successfully'
             })
-            setUpdateCategory({...updateCategory,name:''})
+            setUpdateCategory({ ...updateCategory, name: '' })
             getDataCategory()
         }).catch(err => {
-            dispatch(hideLoading())
+            setLoading({...loading,category:false})
             if (err.response) {
                 store.addNotification({
                     ...errorNotification,
@@ -227,7 +230,7 @@ function Index() {
             }
         })
     }
-    
+
     const getDataCategory = useCallback(() => {
         Axios({
             method: 'GET',
@@ -244,7 +247,7 @@ function Index() {
                     checked: false,
                 }
             })
-          
+
             setListCategory(tmp_data)
         }).catch(err => {
             setLoadingCategory(false)
@@ -256,6 +259,7 @@ function Index() {
             }
 
             else {
+               
                 store.addNotification({
                     ...errorNotification,
                     message: err.message
@@ -270,78 +274,78 @@ function Index() {
         tmpArr[index].checked = !tmpArr[index].checked
         setListCategory(tmpArr)
     }
-    const handleCheckAllCategory = (e)=>{
+    const handleCheckAllCategory = (e) => {
         let tmpArr = Array.from(listCategory)
-        for(let i=0;i<tmpArr.length; i++){
+        for (let i = 0; i < tmpArr.length; i++) {
             tmpArr[i].checked = e.target.checked
         }
         setListCategory(tmpArr)
     }
-    const deleteItemCategory = (e)=>{
+    const deleteItemCategory = (e) => {
         e.preventDefault()
-        dispatch(showLoading())
+        setLoading({ ...loading, category: true })
         let currentId = []
         let tmp_arr = Array.from(listCategory)
         let filterData = tmp_arr.filter(item => item.checked === true)
         for (let i = 0; i < filterData.length; i++) {
             currentId.push(filterData[i].id)
-        }     
+        }
         if (filterData.length <= 0) {
-            dispatch(hideLoading())
+            setLoading({ ...loading, category: false })
             return;
-        }       
-       Axios.put('http://localhost:8080/api/product/category/delete',{id:currentId},{headers:authHeader()}).then(response=>{
+        }
+        Axios.put('http://localhost:8080/api/product/category/delete', { id: currentId }, { headers: authHeader() }).then(response => {
             store.addNotification({
                 ...successNotification,
                 message: 'Item deleted successfully'
             })
-            dispatch(hideLoading())
+            setLoading({ ...loading, category: false })
             getDataCategory()
-       }).catch(err=>{
-        dispatch(hideLoading())
-        if (err.response) {
-            store.addNotification({
-                ...errorNotification,
-                message: err.response.data.message
-            })
-        }
+        }).catch(err => {
+            setLoading({ ...loading, category: false })
+            if (err.response) {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.response.data.message
+                })
+            }
 
-        else {
-            store.addNotification({
-                ...errorNotification,
-                message: err.message
-            })
-        }
-       })
+            else {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.message
+                })
+            }
+        })
     }
-    const deleteSingleCategory = (e,id)=>{
+    const deleteSingleCategory = (e, id) => {
         e.preventDefault()
-        dispatch(showLoading())
+        setLoading({ ...loading, category: true })
         let currentId = id
-        
-       Axios.put('http://localhost:8080/api/product/category/delete',{id:currentId},{headers:authHeader()}).then(response=>{
+
+        Axios.put('http://localhost:8080/api/product/category/delete', { id: currentId }, { headers: authHeader() }).then(response => {
             store.addNotification({
                 ...successNotification,
                 message: 'Item deleted successfully'
             })
-            dispatch(hideLoading())
+            setLoading({ ...loading, category: false })
             getDataCategory()
-       }).catch(err=>{
-        dispatch(hideLoading())
-        if (err.response) {
-            store.addNotification({
-                ...errorNotification,
-                message: err.response.data.message
-            })
-        }
+        }).catch(err => {
+            setLoading({ ...loading, category: false })
+            if (err.response) {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.response.data.message
+                })
+            }
 
-        else {
-            store.addNotification({
-                ...errorNotification,
-                message: err.message
-            })
-        }
-       })
+            else {
+                store.addNotification({
+                    ...errorNotification,
+                    message: err.message
+                })
+            }
+        })
     }
     // End category section
     useEffect(() => {
@@ -363,6 +367,7 @@ function Index() {
                                     <label class="form-control-label mb-2">
                                         Name<span class="text-danger"> *</span>
                                     </label>{" "}
+                                
                                     <input
                                         type="text"
                                         id="name"
@@ -413,7 +418,7 @@ function Index() {
                                 <div className="tb_list is-seperate">
                                     <div className="tb_row tb_row_head">
                                         <div className="tb_col_item" style={{ width: '80px' }}>
-                                            <span> <input type="checkbox" onChange={(e)=>handleCheckAllBrand(e)} value="" /></span>
+                                            <span> <input type="checkbox" onChange={(e) => handleCheckAllBrand(e)} value="" /></span>
                                         </div>
                                         <div className="tb_col_item " >
                                             <span className="ml-auto">Name</span>
@@ -424,15 +429,13 @@ function Index() {
                                                 <div className="dropdown custom-dropdown">
                                                     <i class="fas fa-ellipsis-h" data-toggle="dropdown"></i>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <span class="dropdown-item"  onClick={(e)=>deleteItemBrand(e)}> <span class="icon icon-dashboard"></span> Delete</span>
-
+                                                        <span class="dropdown-item" onClick={(e) => deleteItemBrand(e)}> <span class="icon icon-dashboard"></span> Delete</span>
                                                     </div>
                                                 </div>
                                             </span>
                                         </div>
-
                                     </div>
-                                    {!loadingBrand && listBrand &&
+                                    {!loading.brand && listBrand &&
                                         listBrand.map(item => (
                                             <div className="tb_row tb_row_body">
                                                 <div className="tb_col_item" style={{ width: '80px' }}>
@@ -442,14 +445,14 @@ function Index() {
                                                     <span>{item.name}</span>
                                                 </div>
                                                 <div className="tb_col_item d-flex " style={{ cursor: 'pointer' }}>
-                                                    <span style={{ marginLeft: 'auto' }} onClick={(e)=>deleteSingleBrand(e,item.id)}><i className="far fa-trash-alt fa-lg"></i></span>
+                                                    <span style={{ marginLeft: 'auto' }} onClick={(e) => deleteSingleBrand(e, item.id)}><i className="far fa-trash-alt fa-lg"></i></span>
                                                 </div>
 
                                             </div>
                                         ))
                                     }
                                 </div>
-                                {loadingBrand && <p className="text-center"   > <div class="lds-default" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></p>}
+                                {loading.brand && <p className="text-center"   > <div class="lds-default" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></p>}
                             </div>
                         </div>
 
@@ -490,7 +493,6 @@ function Index() {
                     </div>
                 </div>
                 <div className="col-lg-3 my-2 ">
-
                     <div className="card brand-list">
                         <div className="card-header">
                             <h3>List of category</h3>
@@ -500,7 +502,7 @@ function Index() {
                                 <div className="tb_list is-seperate">
                                     <div className="tb_row tb_row_head">
                                         <div className="tb_col_item" style={{ width: '80px' }}>
-                                            <span> <input type="checkbox" onChange={(e)=>handleCheckAllCategory(e)}/></span>
+                                            <span> <input type="checkbox" onChange={(e) => handleCheckAllCategory(e)} /></span>
                                         </div>
                                         <div className="tb_col_item " >
                                             <span className="ml-auto">Name</span>
@@ -508,36 +510,33 @@ function Index() {
 
                                         <div className="tb_col_item d-flex">
                                             <span style={{ marginLeft: 'auto' }}>
-                                            <div className="dropdown custom-dropdown">
+                                                <div className="dropdown custom-dropdown">
                                                     <i class="fas fa-ellipsis-h" data-toggle="dropdown"></i>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <span class="dropdown-item"  onClick={(e)=>deleteItemCategory(e)}> <span class="icon icon-dashboard"></span> Delete</span>
+                                                        <span class="dropdown-item" onClick={(e) => deleteItemCategory(e)}> <span class="icon icon-dashboard"></span> Delete</span>
 
                                                     </div>
                                                 </div>
                                             </span>
                                         </div>
-
                                     </div>
-                                    {!loadingCategory && listCategory &&
+                                    {!loading.category&& listCategory &&
                                         listCategory.map(item => (
                                             <div className="tb_row tb_row_body">
                                                 <div className="tb_col_item" style={{ width: '80px' }}>
-                                                    <span> <input type="checkbox" checked={item.checked} onChange={()=>handleCheckSingleCategory(item.id)} /></span>
+                                                    <span> <input type="checkbox" checked={item.checked} onChange={() => handleCheckSingleCategory(item.id)} /></span>
                                                 </div>
                                                 <div className="tb_col_item">
                                                     <span>{item.name}</span>
                                                 </div>
                                                 <div className="tb_col_item d-flex " style={{ cursor: 'pointer' }}>
-                                                    <span style={{ marginLeft: 'auto', marginRight: '10px' }} onClick={(e)=>deleteSingleCategory(e,item.id)}><i class="far fa-trash-alt fa-lg"></i></span>
+                                                    <span style={{ marginLeft: 'auto', marginRight: '10px' }} onClick={(e) => deleteSingleCategory(e, item.id)}><i class="far fa-trash-alt fa-lg"></i></span>
                                                 </div>
                                             </div>
                                         ))
-
                                     }
-
                                 </div>
-                                {loadingBrand && <p className="text-center"> <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></p>}
+                                {loading.category && <p className="text-center"> <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></p>}
                             </div>
                         </div>
 

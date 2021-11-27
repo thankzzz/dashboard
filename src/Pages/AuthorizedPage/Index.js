@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { RouterContent } from '../../Navigation/RouterContent'
+import { useDispatch, useSelector } from "react-redux";
 import '../../Styles/css/dashboard.css'
 import Header from '../Header'
 import {signout} from '../../Redux/Actions/userAction'
-import {useDispatch} from 'react-redux'
+
 function Index() {
     const [sidebarClose, setSidebarClose] = useState(false)
+    const dispatch = useDispatch()
     const ToggleSidebar = (e) => {
         e.preventDefault()
         setSidebarClose(!sidebarClose)
@@ -14,12 +16,13 @@ function Index() {
         e.preventDefault()
         setSidebarClose(!false)
     }
-    const dispatch = useDispatch()
+    
     const handleSignout = (e)=>{
         e.preventDefault()
         dispatch(signout())
     }
     const sidebarStatus = sidebarClose ? 'sidenav-disable' : ''
+    const [events, setEvents] = useState(['click', 'load', 'scroll']);
     return (
         <div className="main-container">
             {sidebarClose ? "" : <div className="trigger-sidenav" onClick={(e) => closeSidebar(e)}></div>}
